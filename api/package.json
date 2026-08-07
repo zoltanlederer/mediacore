@@ -1,0 +1,12 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "Node/Express/TypeScript API for browsing a media library (reads from a Python-fed SQLite database)",
+  "license": "MIT",
+  "author": "Zoltan Lederer",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
