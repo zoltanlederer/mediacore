@@ -32,6 +32,13 @@ app.get('/', (req: Request, res: Response) => {
     res.send('API is running')
 });
 
+
+app.get('/media', (req: Request, res: Response) => {
+    const allMedia = db.prepare<[], Media>('SELECT * FROM media').all();
+    res.json(allMedia)
+    
+});
+
 app.listen(3000, () => {
     console.log('Listening on port 3000');
 });
