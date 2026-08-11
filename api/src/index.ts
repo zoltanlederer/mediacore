@@ -1,7 +1,32 @@
 import express from 'express';
 import type { Request, Response } from 'express';
+import Database from 'better-sqlite3';
 
 const app = express()
+const db = new Database('./data/demo_media.db');
+
+interface Media {
+    "index": number,
+    imdb_id: string,
+    title: string,
+    year: number,
+    genres: string,
+    runtime_mins: number,
+    studio: string,
+    tagline: string,
+    description: string,
+    tmdb_id: number,
+    source: string,
+    type: string,
+    number_of_seasons: number,
+    number_of_episodes: number,
+    original_title: string,
+    imdb_rating: number,
+    release_date: string,
+    directors: string,
+    poster_path: string,
+    "cast": string,
+}
 
 app.get('/', (req: Request, res: Response) => {
     res.send('API is running')
