@@ -32,11 +32,15 @@ app.get('/', (req: Request, res: Response) => {
     res.send('API is running')
 });
 
-
 app.get('/media', (req: Request, res: Response) => {
+    if (req.query.genre) {
+        const genre = req.query.genre;
+        const getGenre = db.prepare<[string], Media>('SELECT * FROM media WHERE genres LIKE ?').all(`%${genre}%`);
+        res.json(getGenre);
+        return
+    }
     const allMedia = db.prepare<[], Media>('SELECT * FROM media').all();
     res.json(allMedia)
-    
 });
 
 app.listen(3000, () => {
