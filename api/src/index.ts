@@ -33,13 +33,28 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.get('/media', (req: Request, res: Response) => {
+    let page: number = 1;
+    let limit: number = 20;
+
+    if (req.query.page) {
+        page = Number(req.query.page);
+    }
+
+    if (req.query.limit) {
+        limit = Number(req.query.limit);
+    }
+
+    // SQL OFFSET is zero-based, but "page" is 1-based for the user, so page 1 = no rows skipped
+    const offset = (page - 1) * limit
+
     if (req.query.genre) {
         const genre = req.query.genre;
-        const getGenre = db.prepare<[string], Media>('SELECT * FROM media WHERE genres LIKE ?').all(`%${genre}%`);
+        // LIKE with % wildcards since genres is a comma-separated string, not a single value (e.g. "Action, Comedy")
+        const getGenre = db.prepare<[string, number, number], Media>('SELECT * FROM media WHERE genres LIKE ? LIMIT ? OFFSET ?').all(`%${genre}%`, limit, offset);
         res.json(getGenre);
         return
     }
-    const allMedia = db.prepare<[], Media>('SELECT * FROM media').all();
+    const allMedia = db.prepare<[number, number], Media>('SELECT * FROM media LIMIT ? OFFSET ?').all(limit, offset);
     res.json(allMedia)
 });
 
