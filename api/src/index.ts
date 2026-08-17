@@ -33,29 +33,47 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.get('/media', (req: Request, res: Response) => {
+    const baseQuery = 'SELECT * FROM media'
+    const condition = []
+    const params = []
+
     let page: number = 1;
     let limit: number = 20;
-
-    if (req.query.page) {
-        page = Number(req.query.page);
-    }
+    let offset: number = 0
 
     if (req.query.limit) {
         limit = Number(req.query.limit);
     }
 
-    // SQL OFFSET is zero-based, but "page" is 1-based for the user, so page 1 = no rows skipped
-    const offset = (page - 1) * limit
-
+    if (req.query.page) {
+        page = Number(req.query.page);
+        // SQL OFFSET is zero-based, but "page" is 1-based for the user, so page 1 = no rows skipped
+        offset = (page - 1) * limit
+    }
+    
     if (req.query.genre) {
-        const genre = req.query.genre;
         // LIKE with % wildcards since genres is a comma-separated string, not a single value (e.g. "Action, Comedy")
-        const getGenre = db.prepare<[string, number, number], Media>('SELECT * FROM media WHERE genres LIKE ? LIMIT ? OFFSET ?').all(`%${genre}%`, limit, offset);
-        res.json(getGenre);
+        condition.push('genres LIKE ?')
+        params.push(`%${req.query.genre}%`)
+    }
+
+    if (req.query.type) {
+        // exact match here, unlike genre — type is a single fixed value ("movie" or "tv_show"), not a list
+        condition.push('type = ?')
+        params.push(req.query.type)
+    }
+
+    if (condition.length === 0){
+        const allMedia = db.prepare<[number, number], Media>('SELECT * FROM media LIMIT ? OFFSET ?').all(limit, offset);
+        res.json(allMedia)
+        return
+    } else {
+        // safe to join with AND even if only one condition exists — join() on a single-item array just returns that item
+        const conditionInString = condition.join(' AND ')
+        const getMedia = db.prepare<any[], Media>(`${baseQuery} WHERE ${conditionInString} LIMIT ? OFFSET ?`).all(...params, limit, offset);
+        res.json(getMedia);
         return
     }
-    const allMedia = db.prepare<[number, number], Media>('SELECT * FROM media LIMIT ? OFFSET ?').all(limit, offset);
-    res.json(allMedia)
 });
 
 app.listen(3000, () => {
