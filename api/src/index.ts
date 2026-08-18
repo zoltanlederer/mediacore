@@ -50,10 +50,18 @@ app.get('/media', (req: Request, res: Response) => {
 
     if (req.query.limit) {
         limit = Number(req.query.limit);
+        if (isNaN(limit) || limit <=0 ){
+            res.status(400).json({error: 'Limit parameter must be a number.'})
+            return
+        }
     }
 
     if (req.query.page) {
         page = Number(req.query.page);
+        if (isNaN(page) || page <=0 ){
+            res.status(400).json({error: 'Page parameter must be a number.'})
+            return
+        }
         // SQL OFFSET is zero-based, but "page" is 1-based for the user, so page 1 = no rows skipped
         offset = (page - 1) * limit
     }
@@ -65,6 +73,12 @@ app.get('/media', (req: Request, res: Response) => {
     }
 
     if (req.query.type) {
+        const types = ['movie', 'tv_show']
+        const typeValue = String(req.query.type)
+        if (!types.includes(typeValue)) {
+            res.status(400).json({error: 'Type should be "movie" or "tv_show".'})
+            return
+        }
         // exact match here, unlike genre — type is a single fixed value ("movie" or "tv_show"), not a list
         condition.push('type = ?')
         params.push(req.query.type)
