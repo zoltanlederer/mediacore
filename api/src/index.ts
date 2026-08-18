@@ -26,6 +26,13 @@ interface Media {
     directors: string,
     poster_path: string,
     "cast": string,
+    watched: number,
+    watchedAt: string | null,
+}
+
+interface WatchedUpdate {
+    watched: number,
+    watchedAt: string,
 }
 
 app.get('/', (req: Request, res: Response) => {
@@ -75,6 +82,32 @@ app.get('/media', (req: Request, res: Response) => {
         return
     }
 });
+
+app.patch('/media/:index/watched', (req: Request<{index: number}, {}, WatchedUpdate>, res: Response) => {
+    // toggles watched status: unwatched -> watched (sets watchedAt), watched -> unwatched (clears watchedAt)
+    const indexExist = db.prepare<[number], Media>(`SELECT * FROM media WHERE "index" = ?`).get(Number(req.params.index))
+
+    if (!indexExist){
+        res.status(404).json({error: 'Item not found'})
+        return
+    } else {
+        const isWatched: number = indexExist.watched;
+        let watchedUpdate: number;
+        let watchedAt: string | null;
+        
+        if (isWatched === 0) {
+            watchedUpdate = 1;
+            watchedAt = new Date().toISOString();
+        } else {
+            watchedUpdate = 0;
+            watchedAt = null
+        }
+
+        db.prepare<[number, string | null, number]>(`UPDATE media SET watched = ?, watchedAt = ? WHERE "index" = ?`).run(watchedUpdate, watchedAt, Number(req.params.index))
+        res.json({ index: Number(req.params.index), watched: watchedUpdate === 1, watchedAt });
+        return
+    }
+})
 
 app.listen(3000, () => {
     console.log('Listening on port 3000');
