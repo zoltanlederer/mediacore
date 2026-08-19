@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
 import './App.css'
+import type { Media } from './types'
 
 function App() {
-  const [data, setData] = useState<any[]>([])
+  const [data, setData] = useState<Media[]>([])
 
   useEffect(() => {
     fetch('http://localhost:3000/media')
