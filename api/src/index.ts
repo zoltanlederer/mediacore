@@ -1,8 +1,10 @@
 import express from 'express';
 import type { Request, Response } from 'express';
 import Database from 'better-sqlite3';
+import cors from 'cors'
 
-const app = express()
+const app = express();
+app.use(cors());
 const db = new Database('./data/demo_media.db');
 
 interface Media {
