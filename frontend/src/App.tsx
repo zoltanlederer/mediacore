@@ -15,7 +15,30 @@ function App() {
 
   return (
     <>
-    <pre>{JSON.stringify(data)}</pre>
+    <table>
+      <thead>
+        <tr>
+          <th>TITLE</th>
+          <th>GENRE</th>
+          <th>YEAR</th>
+          <th>RATING</th>
+          <th>TYPE</th>
+          <th>WATCHED</th>
+        </tr>
+      </thead>
+      <tbody>
+        {data.map(item => (
+          <tr key={item.index}>
+            <td>{item.title}</td>
+            <td>{item.genres}</td>
+            <td>{item.year}</td>
+            <td>{item.imdb_rating}</td>
+            <td>{item.type}</td>
+            <td>{item.watched}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
     </>
   )
 }
