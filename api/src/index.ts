@@ -88,13 +88,15 @@ app.get('/media', (req: Request, res: Response) => {
 
     if (condition.length === 0){
         const allMedia = db.prepare<[number, number], Media>('SELECT * FROM media LIMIT ? OFFSET ?').all(limit, offset);
-        res.json(allMedia)
+        const formattedMedia = allMedia.map(item => ({ ...item, watched: item.watched === 1 }))
+        res.json(formattedMedia)
         return
     } else {
         // safe to join with AND even if only one condition exists — join() on a single-item array just returns that item
         const conditionInString = condition.join(' AND ')
         const getMedia = db.prepare<any[], Media>(`${baseQuery} WHERE ${conditionInString} LIMIT ? OFFSET ?`).all(...params, limit, offset);
-        res.json(getMedia);
+        const formattedMedia = getMedia.map(item => ({ ...item, watched: item.watched === 1 }))
+        res.json(formattedMedia);
         return
     }
 });
