@@ -13,6 +13,19 @@ function App() {
     })
   }, [])
 
+  const handleWatchedToggle = (selectedIndex: number) => {
+    fetch(`http://localhost:3000/media/${selectedIndex}/watched`, { method: 'PATCH' })
+    .then(res => res.json())
+    .then(watchedItem => (
+      // update only the matching row, keeping all other rows unchanged (avoids refetching the whole list)
+      setData(prevData => 
+        prevData.map(item => 
+          item.index === selectedIndex ? { ...item, watched: watchedItem.watched } : item
+        )
+      )
+    ))
+  }
+
   return (
     <>
     <table>
@@ -34,7 +47,7 @@ function App() {
             <td>{item.year}</td>
             <td>{item.imdb_rating}</td>
             <td>{item.type}</td>
-            <td>{item.watched}</td>
+            <td onClick={() => handleWatchedToggle(item.index)}>{item.watched ? '✅' : '❌'}</td>
           </tr>
         ))}
       </tbody>
