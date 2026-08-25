@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 import type { Media } from './types'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import MediaList from './MediaList'
+import MediaDetail from './MediaDetail'
 
 function App() {
   const [data, setData] = useState<Media[]>([])
@@ -29,7 +31,12 @@ function App() {
 
   return (
     <>
-    <MediaList data={data} onWatchedToggle={handleWatchedToggle} />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<MediaList data={data} onWatchedToggle={handleWatchedToggle} />} />
+        <Route path="/media/:index" element={<MediaDetail data={data} />} />
+      </Routes>      
+    </BrowserRouter>
     </>
   )
 }
