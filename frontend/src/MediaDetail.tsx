@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import type { Media } from './types';
 
 interface MediaDetaillProps {
@@ -16,6 +16,7 @@ function MediaDetail ({data}: MediaDetaillProps) {
     return (
         <>
         <p>Media title: {item.title}</p>
+        <Link to="/">← Back to list</Link>
         </>
     )
 }
