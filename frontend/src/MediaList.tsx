@@ -1,4 +1,5 @@
 import type { Media } from './types'
+import { Link } from 'react-router-dom'
 
 interface MediaListProps {
 	data: Media[];
@@ -23,7 +24,9 @@ function MediaList({data, onWatchedToggle}: MediaListProps) {
 		<tbody>
 				{data.map(item => (
 				<tr key={item.index}>
-						<td>{item.title}</td>
+						<td>
+							<Link to={`/media/${item.index}`}>{item.title}</Link>
+						</td>
 						<td>{item.genres}</td>
 						<td>{item.year}</td>
 						<td>{item.imdb_rating}</td>
