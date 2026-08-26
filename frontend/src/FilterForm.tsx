@@ -1,8 +1,12 @@
 import { useState, useEffect } from 'react'
 
-function FilterForm () {
+interface FilterFormProps {
+    selectedGenre: string;
+    onGenreChange: (value: string) => void;
+}
+
+function FilterForm ({selectedGenre, onGenreChange}: FilterFormProps) {
     const [genres, setGenres] = useState<string[]>([])
-    const [selectedGenre, setSelectedGenre] = useState('All')
 
     useEffect(() => {
         fetch('http://localhost:3000/genres')
@@ -11,12 +15,12 @@ function FilterForm () {
     }, [])
 
     const handleGenre = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setSelectedGenre(e.target.value)
+        onGenreChange(e.target.value)
     }
 
     return (
         <>
-        <select onChange={handleGenre}>
+        <select value={selectedGenre} onChange={handleGenre}>
             <option>All</option>
             {genres.map(genre => (
                 <option key={genre}>{genre}</option>

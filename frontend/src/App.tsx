@@ -7,15 +7,17 @@ import MediaDetail from './MediaDetail'
 import FilterForm from './FilterForm'
 
 function App() {
-  const [data, setData] = useState<Media[]>([])
+  const [data, setData] = useState<Media[]>([]) 
+  const [selectedGenre, setSelectedGenre] = useState('All')
 
   useEffect(() => {
-    fetch('http://localhost:3000/media')
+    const baseUrl = 'http://localhost:3000/media'
+    fetch(selectedGenre === 'All' ? baseUrl : `${baseUrl}?genre=${selectedGenre}`)
     .then(res => res.json())
     .then(fetchedData => {
       setData(fetchedData)
     })
-  }, [])
+  }, [selectedGenre])
 
   const handleWatchedToggle = (selectedIndex: number) => {
     fetch(`http://localhost:3000/media/${selectedIndex}/watched`, { method: 'PATCH' })
@@ -36,7 +38,7 @@ function App() {
       <Routes>
         <Route path="/" element={
           <>
-            <FilterForm />
+            <FilterForm selectedGenre={selectedGenre} onGenreChange={setSelectedGenre} />
             <MediaList data={data} onWatchedToggle={handleWatchedToggle} />
           </>
         }/>
