@@ -4,6 +4,7 @@ import type { Media } from './types'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import MediaList from './MediaList'
 import MediaDetail from './MediaDetail'
+import FilterForm from './FilterForm'
 
 function App() {
   const [data, setData] = useState<Media[]>([])
@@ -33,7 +34,12 @@ function App() {
     <>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<MediaList data={data} onWatchedToggle={handleWatchedToggle} />} />
+        <Route path="/" element={
+          <>
+            <FilterForm />
+            <MediaList data={data} onWatchedToggle={handleWatchedToggle} />
+          </>
+        }/>
         <Route path="/media/:index" element={<MediaDetail data={data} />} />
       </Routes>      
     </BrowserRouter>
