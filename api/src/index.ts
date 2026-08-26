@@ -2,6 +2,7 @@ import express from 'express';
 import type { Request, Response } from 'express';
 import Database from 'better-sqlite3';
 import cors from 'cors'
+import { request } from 'node:http';
 
 const app = express();
 app.use(cors());
@@ -100,6 +101,14 @@ app.get('/media', (req: Request, res: Response) => {
         return
     }
 });
+
+app.get('/genres', (req: Request, res: Response) => {
+    const genresDb = db.prepare<[], {genres: string}>('SELECT genres FROM media').all()
+    const genresLists = genresDb.flatMap(row => row.genres.split(',')).map(item => item.trim())
+    const genres = new Set(genresLists)
+    const genresArray = Array.from(genres)
+    res.json(genresArray.sort())
+})
 
 app.patch('/media/:index/watched', (req: Request<{index: number}, {}, WatchedUpdate>, res: Response) => {
     // toggles watched status: unwatched -> watched (sets watchedAt), watched -> unwatched (clears watchedAt)
