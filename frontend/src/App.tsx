@@ -28,7 +28,7 @@ function App() {
     fetch(url)
     .then(res => res.json())
     .then(fetchedData => {
-      setData(fetchedData)
+      setData(fetchedData.data)
     })
   }, [selectedGenre, selectedType])
 
