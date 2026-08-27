@@ -2,7 +2,6 @@ import express from 'express';
 import type { Request, Response } from 'express';
 import Database from 'better-sqlite3';
 import cors from 'cors'
-import { request } from 'node:http';
 
 const app = express();
 app.use(cors());
@@ -49,7 +48,7 @@ app.get('/media', (req: Request, res: Response) => {
 
     let page: number = 1;
     let limit: number = 20;
-    let offset: number = 0
+    let offset: number = 0;
 
     if (req.query.limit) {
         limit = Number(req.query.limit);
@@ -90,14 +89,40 @@ app.get('/media', (req: Request, res: Response) => {
     if (condition.length === 0){
         const allMedia = db.prepare<[number, number], Media>('SELECT * FROM media LIMIT ? OFFSET ?').all(limit, offset);
         const formattedMedia = allMedia.map(item => ({ ...item, watched: item.watched === 1 }))
-        res.json(formattedMedia)
+        const getTotal = db.prepare<[], {total: number}>('SELECT COUNT(*) as total FROM media').get();
+        
+        if(!getTotal) {
+            return
+        }
+        
+        const data = {
+            total: getTotal.total,
+            page: page,
+            limit: limit,
+            data: formattedMedia
+        }
+
+        res.json(data)
         return
     } else {
         // safe to join with AND even if only one condition exists — join() on a single-item array just returns that item
         const conditionInString = condition.join(' AND ')
         const getMedia = db.prepare<any[], Media>(`${baseQuery} WHERE ${conditionInString} LIMIT ? OFFSET ?`).all(...params, limit, offset);
         const formattedMedia = getMedia.map(item => ({ ...item, watched: item.watched === 1 }))
-        res.json(formattedMedia);
+        const getTotal = db.prepare<any[], {total: number}>(`SELECT COUNT(*) as total FROM media WHERE ${conditionInString}`).get(...params);
+        
+        if(!getTotal) {
+            return
+        }
+
+        const data = {
+            total: getTotal.total,
+            page: page,
+            limit: limit,
+            data: formattedMedia
+        }
+
+        res.json(data)
         return
     }
 });
