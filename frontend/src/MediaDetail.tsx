@@ -1,13 +1,16 @@
+import { useContext } from "react";
 import { Link, useParams } from "react-router-dom";
-import type { Media } from './types';
+import MediaContext from "./MediaContext";
 
-interface MediaDetaillProps {
-    data: Media[];
-}
+function MediaDetail () {
+    const context = useContext(MediaContext)
 
-function MediaDetail ({data}: MediaDetaillProps) {
+    if (!context) {
+        return null
+    }
+
     const { index } = useParams();
-    const item = data.find(mediaItem => mediaItem.index === Number(index))
+    const item = context.data.find(mediaItem => mediaItem.index === Number(index))
 
     if (!item) {
         return <p>Not found</p>

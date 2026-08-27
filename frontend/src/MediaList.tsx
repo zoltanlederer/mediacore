@@ -1,12 +1,13 @@
-import type { Media } from './types'
+import { useContext } from 'react';
 import { Link } from 'react-router-dom'
+import MediaContext from './MediaContext';
 
-interface MediaListProps {
-	data: Media[];
-	onWatchedToggle: (selectedIndex: number) => void;
-}
-
-function MediaList({data, onWatchedToggle}: MediaListProps) {
+function MediaList() {
+	const context = useContext(MediaContext)
+	
+	if (!context){
+		return null
+	}
 
 	return (
 		<>
@@ -22,7 +23,7 @@ function MediaList({data, onWatchedToggle}: MediaListProps) {
 				</tr>
 		</thead>
 		<tbody>
-				{data.map(item => (
+				{context.data.map(item => (
 				<tr key={item.index}>
 						<td>
 							<Link to={`/media/${item.index}`}>{item.title}</Link>
@@ -31,7 +32,7 @@ function MediaList({data, onWatchedToggle}: MediaListProps) {
 						<td>{item.year}</td>
 						<td>{item.imdb_rating}</td>
 						<td>{item.type}</td>
-						<td onClick={() => onWatchedToggle(item.index)}>{item.watched ? '✅' : '❌'}</td>
+						<td onClick={() => context.onWatchedToggle(item.index)}>{item.watched ? '✅' : '❌'}</td>
 				</tr>
 				))}
 		</tbody>

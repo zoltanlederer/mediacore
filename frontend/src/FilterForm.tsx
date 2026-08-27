@@ -1,13 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
+import MediaContext from './MediaContext'
 
-interface FilterFormProps {
-    selectedGenre: string;
-    onGenreChange: (value: string) => void;
-    selectedType: string;
-    onSelectedTypeChange: (value: string) => void;
-}
-
-function FilterForm ({selectedGenre, onGenreChange, selectedType, onSelectedTypeChange}: FilterFormProps) {
+function FilterForm () {
+    const context = useContext(MediaContext)
     const [genres, setGenres] = useState<string[]>([])
 
     useEffect(() => {
@@ -16,23 +11,27 @@ function FilterForm ({selectedGenre, onGenreChange, selectedType, onSelectedType
         .then((res: string[]) => setGenres(res))
     }, [])
 
+    if(!context) {
+        return null
+    }
+
     const handleGenre = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        onGenreChange(e.target.value)
+        context.onGenreChange(e.target.value)
     }
 
     const handleSelectedType = ((e: React.ChangeEvent<HTMLSelectElement>) => {
-        onSelectedTypeChange(e.target.value)
+        context.onSelectedTypeChange(e.target.value)
     })
 
     return (
         <>
-        <select value={selectedGenre} onChange={handleGenre}>
+        <select value={context.selectedGenre} onChange={handleGenre}>
             <option>All</option>
             {genres.map(genre => (
                 <option key={genre}>{genre}</option>
             ))}
         </select>
-        <select value={selectedType} onChange={handleSelectedType}>
+        <select value={context.selectedType} onChange={handleSelectedType}>
             <option value='all'>All</option>
             <option value='movie'>Movie</option>
             <option value='tv_show'>TV Show</option>

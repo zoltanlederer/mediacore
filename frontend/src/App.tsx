@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import './App.css'
 import type { Media } from './types'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import MediaContext from './MediaContext'
 import MediaList from './MediaList'
 import MediaDetail from './MediaDetail'
 import FilterForm from './FilterForm'
@@ -23,7 +24,7 @@ function App() {
     }
 
     const url = params.toString() ? `${baseUrl}?${params.toString()}` : baseUrl
-        
+
     fetch(url)
     .then(res => res.json())
     .then(fetchedData => {
@@ -46,17 +47,26 @@ function App() {
 
   return (
     <>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={
-          <>
-            <FilterForm selectedGenre={selectedGenre} onGenreChange={setSelectedGenre} selectedType={selectedType} onSelectedTypeChange={setSelectedType} />
-            <MediaList data={data} onWatchedToggle={handleWatchedToggle} />
-          </>
-        }/>
-        <Route path="/media/:index" element={<MediaDetail data={data} />} />
-      </Routes>      
-    </BrowserRouter>
+    <MediaContext.Provider value={{
+      data,
+      onWatchedToggle: handleWatchedToggle,
+      selectedGenre,
+      onGenreChange: setSelectedGenre,
+      selectedType,
+      onSelectedTypeChange: setSelectedType
+    }}>
+      <BrowserRouter>
+        <Routes>        
+          <Route path="/" element={
+            <>
+              <FilterForm />
+              <MediaList />
+            </>
+          }/>
+          <Route path="/media/:index" element={<MediaDetail />} />
+        </Routes>      
+      </BrowserRouter>
+    </MediaContext.Provider>
     </>
   )
 }
