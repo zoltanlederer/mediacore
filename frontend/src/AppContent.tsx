@@ -13,6 +13,8 @@ function AppContent() {
   const [total, setTotal] = useState(0)
   const [limit, setLimit] = useState(0)
 
+  // filters and page live in the URL (not useState) so they survive a refresh,
+  // work with browser back/forward, and can be shared as a link
   const [searchParams, setSearchParams] = useSearchParams()
 
   const selectedGenre = searchParams.get('genre') ?? 'All'
@@ -21,8 +23,10 @@ function AppContent() {
 
   useEffect(() => {
     const baseUrl = 'http://localhost:3000/media'
+    // this is a SEPARATE params object for the backend fetch request —
+    // not the same as the frontend's own URL params above, even though
+    // it's built from the same three values
     const params = new URLSearchParams()
-    
 
     if (selectedGenre.toLocaleLowerCase() != 'all') {
       params.append('genre', selectedGenre)
@@ -78,6 +82,7 @@ function AppContent() {
     } else {
         newParams.set('type', value)
     }
+    // reset page here too, in the same params object — see updateGenreParam for why
     newParams.delete('page')
     setSearchParams(newParams)
   }

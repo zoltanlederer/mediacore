@@ -12,6 +12,7 @@ function Pagination () {
     const limit = context.limit
 
     const handleDeductPageNumber = () => {
+        // page - 1, not page--, since page-- returns the OLD value before decrementing
         context.onPageChange(page - 1)
     }
 
