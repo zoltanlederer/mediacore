@@ -6,7 +6,7 @@ interface MediaContextType {
     page: number;
     total: number;
     limit: number
-    setPage: (value: number) => void;
+    onPageChange: (value: number) => void;
     onWatchedToggle: (selectedIndex: number) => void;
     selectedGenre: string;
     onGenreChange: (value: string) => void;

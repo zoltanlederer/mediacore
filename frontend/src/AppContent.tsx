@@ -9,21 +9,20 @@ import FilterForm from './FilterForm'
 import Pagination from './Pagination'
 
 function AppContent() {
-  const [data, setData] = useState<Media[]>([]) 
-  const [page, setPage] = useState(1)
+  const [data, setData] = useState<Media[]>([])
   const [total, setTotal] = useState(0)
   const [limit, setLimit] = useState(0)
-  const [selectedGenre, setSelectedGenre] = useState('All')
-  const [selectedType, setSelectedType] = useState('all')
 
   const [searchParams, setSearchParams] = useSearchParams()
 
-  console.log(searchParams.get('genre'))
-  console.log(searchParams.get('page'))
+  const selectedGenre = searchParams.get('genre') ?? 'All'
+  const selectedType = searchParams.get('type') ?? 'all'
+  const page = Number(searchParams.get('page')) || 1
 
   useEffect(() => {
     const baseUrl = 'http://localhost:3000/media'
     const params = new URLSearchParams()
+    
 
     if (selectedGenre.toLocaleLowerCase() != 'all') {
       params.append('genre', selectedGenre)
@@ -41,7 +40,6 @@ function AppContent() {
     .then(res => res.json())
     .then(fetchedData => {
       setData(fetchedData.data)
-      setPage(fetchedData.page)
       setTotal(fetchedData.total)
       setLimit(fetchedData.limit)
     })
@@ -60,19 +58,54 @@ function AppContent() {
     ))
   }
 
+  // resets page whenever genre changes, combined into the same params update
+  // (calling this separately from a page-reset would race against stale searchParams)
+  const updateGenreParam = (value: string) => {
+    const newParams = new URLSearchParams(searchParams)
+    if (value.toLocaleLowerCase() === 'all') {
+        newParams.delete('genre')
+    } else {
+        newParams.set('genre', value)
+    }
+    newParams.delete('page')
+    setSearchParams(newParams)
+  }
+
+  const updateTypeParam = (value: string) => {
+    const newParams = new URLSearchParams(searchParams)
+    if (value.toLocaleLowerCase() === 'all') {
+        newParams.delete('type')
+    } else {
+        newParams.set('type', value)
+    }
+    newParams.delete('page')
+    setSearchParams(newParams)
+  }
+
+  const updatePageParam = (value: number) => {
+    const newParams = new URLSearchParams(searchParams)
+    if (value <= 1) {
+        newParams.delete('page')
+    } else {
+        newParams.set('page', String(value))
+    }
+    setSearchParams(newParams)
+  }
+
+
   return (
     <>
     <MediaContext.Provider value={{
       data,
       page,
-      setPage,
+      onPageChange: updatePageParam,
       total,
       limit,
       onWatchedToggle: handleWatchedToggle,
       selectedGenre,
-      onGenreChange: setSelectedGenre,
+      onGenreChange: updateGenreParam,
       selectedType,
-      onSelectedTypeChange: setSelectedType,
+      onSelectedTypeChange: updateTypeParam,
     }}>
       <>
         <Routes>        

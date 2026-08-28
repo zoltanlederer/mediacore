@@ -12,11 +12,11 @@ function Pagination () {
     const limit = context.limit
 
     const handleDeductPageNumber = () => {
-        context.setPage(page - 1)
+        context.onPageChange(page - 1)
     }
 
     const handleAddPageNumber = () => {
-        context.setPage(page + 1)
+        context.onPageChange(page + 1)
     }
 
     return (
