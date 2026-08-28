@@ -17,10 +17,12 @@ function FilterForm () {
 
     const handleGenre = (e: React.ChangeEvent<HTMLSelectElement>) => {
         context.onGenreChange(e.target.value)
+        context.setPage(1)
     }
 
     const handleSelectedType = ((e: React.ChangeEvent<HTMLSelectElement>) => {
         context.onSelectedTypeChange(e.target.value)
+        context.setPage(1)
     })
 
     return (

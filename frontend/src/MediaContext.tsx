@@ -3,6 +3,10 @@ import type { Media } from './types';
 
 interface MediaContextType {
     data: Media[];
+    page: number;
+    total: number;
+    limit: number
+    setPage: (value: number) => void;
     onWatchedToggle: (selectedIndex: number) => void;
     selectedGenre: string;
     onGenreChange: (value: string) => void;
