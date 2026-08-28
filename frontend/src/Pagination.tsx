@@ -21,10 +21,15 @@ function Pagination () {
     }
 
     return (
-        <>
-        {page > 1 && <button onClick={handleDeductPageNumber}>← Previous</button>}
-        {(page * limit) < total && <button onClick={handleAddPageNumber}>Next →</button>}
-        </>
+        <div className="pagination">
+            <span className="pagination-status">
+                Showing {(page - 1) * limit + 1}-{Math.min(page * limit, total)} of {total}
+            </span>
+            <div className="pagination-buttons">
+                {page > 1 && <button onClick={handleDeductPageNumber}>← Previous</button>}
+                {(page * limit) < total && <button className="primary" onClick={handleAddPageNumber}>Next →</button>}
+            </div>
+        </div>
     )
 } 
 

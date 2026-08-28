@@ -112,7 +112,7 @@ function AppContent() {
       selectedType,
       onSelectedTypeChange: updateTypeParam,
     }}>
-      <>
+      <div className="app-container">
         <Routes>        
           <Route path="/" element={
             <>
@@ -123,7 +123,7 @@ function AppContent() {
           }/>
           <Route path="/media/:index" element={<MediaDetail />} />
         </Routes>      
-      </>
+      </div>
     </MediaContext.Provider>
     </>
   )

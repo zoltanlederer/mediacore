@@ -11,29 +11,42 @@ function MediaList() {
 
 	return (
 		<>
-		<table>
+		<table className="media-table">
 		<thead>
 				<tr>
 				<th colSpan={2}>TITLE</th>
 				<th>GENRE</th>
-				<th>YEAR</th>
-				<th>RATING</th>
+				<th className="col-year">YEAR</th>
+				<th className="col-rating">RATING</th>
 				<th>TYPE</th>
-				<th>WATCHED</th>
+				<th className="col-watched">WATCHED</th>
 				</tr>
 		</thead>
 		<tbody>
 			{context.data.map(item => (
 			<tr key={item.index}>
-				<td><img src={item.poster_path ? `https://image.tmdb.org/t/p/w92${item.poster_path}` : "/images/poster-placeholder.png"} alt={item.title} /></td>
+				<td>
+					<img
+						className="poster-thumbnail"
+						src={item.poster_path ? `https://image.tmdb.org/t/p/w92${item.poster_path}` : "/images/poster-placeholder.png"}
+						alt={item.title}
+					/>
+				</td>
 				<td>
 					<Link to={`/media/${item.index}`}>{item.title}</Link>
 				</td>
 				<td>{item.genres}</td>
-				<td>{item.year}</td>
-				<td>{item.imdb_rating}</td>
+				<td className="col-year">{item.year}</td>
+				<td className="col-rating">{item.imdb_rating}</td>
 				<td>{item.type}</td>
-				<td onClick={() => context.onWatchedToggle(item.index)}>{item.watched ? '✅' : '❌'}</td>
+				<td className="col-watched">
+					<span
+						className={`watched-toggle ${item.watched ? 'watched' : 'unwatched'}`}
+						onClick={() => context.onWatchedToggle(item.index)}
+					>
+						{item.watched ? '✓' : '✕'}
+					</span>
+				</td>
 			</tr>
 			))}
 		</tbody>

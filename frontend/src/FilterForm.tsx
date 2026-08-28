@@ -26,19 +26,22 @@ function FilterForm () {
     })
 
     return (
-        <>
-        <select value={context.selectedGenre} onChange={handleGenre}>
-            <option>All</option>
-            {genres.map(genre => (
-                <option key={genre}>{genre}</option>
-            ))}
-        </select>
-        <select value={context.selectedType} onChange={handleSelectedType}>
-            <option value='all'>All</option>
-            <option value='movie'>Movie</option>
-            <option value='tv_show'>TV Show</option>
-        </select>
-        </>
+        <div className="app-header">
+            <h1>MediaCore</h1>
+            <div className="filters">
+                <select value={context.selectedGenre} onChange={handleGenre}>
+                    <option>All</option>
+                    {genres.map(genre => (
+                        <option key={genre}>{genre}</option>
+                    ))}
+                </select>
+                <select value={context.selectedType} onChange={handleSelectedType}>
+                    <option value='all'>All</option>
+                    <option value='movie'>Movie</option>
+                    <option value='tv_show'>TV Show</option>
+                </select>
+            </div>
+        </div>
     )
 }
 
