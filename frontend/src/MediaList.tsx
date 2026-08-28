@@ -14,7 +14,7 @@ function MediaList() {
 		<table>
 		<thead>
 				<tr>
-				<th>TITLE</th>
+				<th colSpan={2}>TITLE</th>
 				<th>GENRE</th>
 				<th>YEAR</th>
 				<th>RATING</th>
@@ -23,18 +23,19 @@ function MediaList() {
 				</tr>
 		</thead>
 		<tbody>
-				{context.data.map(item => (
-				<tr key={item.index}>
-						<td>
-							<Link to={`/media/${item.index}`}>{item.title}</Link>
-						</td>
-						<td>{item.genres}</td>
-						<td>{item.year}</td>
-						<td>{item.imdb_rating}</td>
-						<td>{item.type}</td>
-						<td onClick={() => context.onWatchedToggle(item.index)}>{item.watched ? '✅' : '❌'}</td>
-				</tr>
-				))}
+			{context.data.map(item => (
+			<tr key={item.index}>
+				<td><img src={item.poster_path ? `https://image.tmdb.org/t/p/w92${item.poster_path}` : "/images/poster-placeholder.png"} alt={item.title} /></td>
+				<td>
+					<Link to={`/media/${item.index}`}>{item.title}</Link>
+				</td>
+				<td>{item.genres}</td>
+				<td>{item.year}</td>
+				<td>{item.imdb_rating}</td>
+				<td>{item.type}</td>
+				<td onClick={() => context.onWatchedToggle(item.index)}>{item.watched ? '✅' : '❌'}</td>
+			</tr>
+			))}
 		</tbody>
 		</table>
 		</>
