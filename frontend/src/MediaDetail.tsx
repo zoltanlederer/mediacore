@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import type { Media } from './types'
 
 function MediaDetail () {
     const [item, setItem] = useState<Media | null>(null)
     const [notFound, setNotFound] = useState(false)
     const { index } = useParams();
+    const navigate = useNavigate()
 
     useEffect(() => {
         setNotFound(false)
@@ -29,7 +30,7 @@ function MediaDetail () {
 
     return (
         <>
-        <Link to="/" className="detail-back-link">← Back to list</Link>
+        <button className="detail-back-link" onClick={() => navigate(-1)}>← Back to list</button>
         <div className="detail-page">
             <img
                 className="detail-poster"

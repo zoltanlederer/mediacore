@@ -155,6 +155,11 @@ body {
   color: #7DB2F0;
   text-decoration: none;
   font-size: 14px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
 }
 
 .detail-title {
