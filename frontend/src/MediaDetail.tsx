@@ -1,19 +1,30 @@
-import { useContext } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import MediaContext from "./MediaContext";
+import type { Media } from './types'
 
 function MediaDetail () {
-    const context = useContext(MediaContext)
+    const [item, setItem] = useState<Media | null>(null)
+    const [notFound, setNotFound] = useState(false)
+    const { index } = useParams();
 
-    if (!context) {
-        return null
+    useEffect(() => {
+        setNotFound(false)
+        fetch(`http://localhost:3000/media/${index}`)
+        .then(res => {
+            if (!res.ok) {
+                setNotFound(true)
+            }
+            return res.json()
+        })
+        .then(data => setItem(data))
+    },[index])
+
+    if(!item){
+        return <p>Loading...</p>
     }
 
-    const { index } = useParams();
-    const item = context.data.find(mediaItem => mediaItem.index === Number(index))
-
-    if (!item) {
-        return <p>Not found</p>
+    if(notFound){
+        return <p>Item not found!</p>
     }
 
     return (
