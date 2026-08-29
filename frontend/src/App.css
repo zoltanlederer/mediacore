@@ -22,10 +22,15 @@ body {
   margin-bottom: 1.25rem;
 }
 
-.app-header h1 {
-  margin: 0;
-  font-size: 32px;
+.logo-link {
+  color: #F1F5F9;
+  text-decoration: none;
+  font-size: 28px;
   font-weight: 500;
+}
+
+.logo-link:hover {
+  text-decoration: none;
 }
 
 .filters {

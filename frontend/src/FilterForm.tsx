@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from 'react'
+import { Link } from 'react-router-dom'
 import MediaContext from './MediaContext'
 
 function FilterForm () {
@@ -27,7 +28,7 @@ function FilterForm () {
 
     return (
         <div className="app-header">
-            <h1>MediaCore</h1>
+            <Link to="/" className="logo-link">MediaCore</Link>
             <div className="filters">
                 <select value={context.selectedGenre} onChange={handleGenre}>
                     <option>All</option>
