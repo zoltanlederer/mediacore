@@ -65,7 +65,7 @@ body {
   font-size: 11px;
   letter-spacing: 0.03em;
   text-align: left;
-  font-weight: 400;
+  font-weight: 700;
   border-bottom: 1px solid #263449;
 }
 
@@ -79,8 +79,8 @@ body {
   border-bottom: none;
 }
 
-.media-table .col-year,
-.media-table .col-rating {
+.media-table td.col-year,
+.media-table td.col-rating {
   font-family: ui-monospace, monospace;
   font-size: 13px;
 }
