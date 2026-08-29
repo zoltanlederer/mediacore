@@ -30,17 +30,23 @@ function FilterForm () {
         <div className="app-header">
             <Link to="/" className="logo-link">MediaCore</Link>
             <div className="filters">
-                <select value={context.selectedGenre} onChange={handleGenre}>
-                    <option>All</option>
-                    {genres.map(genre => (
-                        <option key={genre}>{genre}</option>
-                    ))}
-                </select>
-                <select value={context.selectedType} onChange={handleSelectedType}>
-                    <option value='all'>All</option>
-                    <option value='movie'>Movie</option>
-                    <option value='tv_show'>TV Show</option>
-                </select>
+                <div className="filter-group">
+                    <label htmlFor="genre-select">Genre</label>
+                    <select id="genre-select" value={context.selectedGenre} onChange={handleGenre}>
+                        <option>All</option>
+                        {genres.map(genre => (
+                            <option key={genre}>{genre}</option>
+                        ))}
+                    </select>
+                </div>
+                <div className="filter-group">
+                    <label htmlFor="type-select">Type</label>
+                    <select id="type-select" value={context.selectedType} onChange={handleSelectedType}>
+                        <option value='all'>All</option>
+                        <option value='movie'>Movie</option>
+                        <option value='tv_show'>TV Show</option>
+                    </select>
+                </div>
             </div>
         </div>
     )

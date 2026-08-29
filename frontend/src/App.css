@@ -48,6 +48,18 @@ body {
   padding: 0 10px;
 }
 
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.filter-group label {
+  font-size: 11px;
+  color: #7C8CA8;
+  letter-spacing: 0.03em;
+}
+
 .media-table {
   width: 100%;
   border-collapse: collapse;
