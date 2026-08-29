@@ -135,6 +135,15 @@ app.get('/genres', (req: Request, res: Response) => {
     res.json(genresArray.sort())
 })
 
+app.get('/media/:index', (req: Request<{index: number}>, res:Response) => {
+    const item = db.prepare<[number], Media>(`SELECT * from media where "index" = ?`).get(Number(req.params.index))
+    if (!item){
+        res.status(404).json({error: 'Item not found'})
+        return
+    }
+    res.json({ ...item, watched: item.watched === 1 })
+})
+
 app.patch('/media/:index/watched', (req: Request<{index: number}, {}, WatchedUpdate>, res: Response) => {
     // toggles watched status: unwatched -> watched (sets watchedAt), watched -> unwatched (clears watchedAt)
     const indexExist = db.prepare<[number], Media>(`SELECT * FROM media WHERE "index" = ?`).get(Number(req.params.index))
