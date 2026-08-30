@@ -4,7 +4,10 @@ import Database from 'better-sqlite3';
 import cors from 'cors'
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: 'https://mediacore.zoltanlederer.com'
+}));
+
 const db = new Database('./data/demo_media.db');
 
 interface Media {
