@@ -5,7 +5,7 @@ import cors from 'cors'
 
 const app = express();
 app.use(cors({
-  origin: 'https://mediacore.zoltanlederer.com'
+  origin: process.env.CORS_ORIGIN || 'http://localhost:5173'
 }));
 
 const db = new Database('./data/demo_media.db');
