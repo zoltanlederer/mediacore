@@ -10,7 +10,7 @@ function MediaDetail () {
 
     useEffect(() => {
         setNotFound(false)
-        fetch(`http://localhost:3000/media/${index}`)
+        fetch(`${import.meta.env.VITE_API_URL}/media/${index}`)
         .then(res => {
             if (!res.ok) {
                 setNotFound(true)

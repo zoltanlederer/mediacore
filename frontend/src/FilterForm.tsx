@@ -7,7 +7,7 @@ function FilterForm () {
     const [genres, setGenres] = useState<string[]>([])
 
     useEffect(() => {
-        fetch('http://localhost:3000/genres')
+        fetch(`${import.meta.env.VITE_API_URL}/genres`)
         .then(res => res.json())
         .then((res: string[]) => setGenres(res))
     }, [])

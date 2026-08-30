@@ -22,7 +22,7 @@ function AppContent() {
   const page = Number(searchParams.get('page')) || 1
 
   useEffect(() => {
-    const baseUrl = 'http://localhost:3000/media'
+    const baseUrl = `${import.meta.env.VITE_API_URL}/media`
     // this is a SEPARATE params object for the backend fetch request —
     // not the same as the frontend's own URL params above, even though
     // it's built from the same three values
@@ -50,7 +50,7 @@ function AppContent() {
   }, [selectedGenre, selectedType, page])
 
   const handleWatchedToggle = (selectedIndex: number) => {
-    fetch(`http://localhost:3000/media/${selectedIndex}/watched`, { method: 'PATCH' })
+    fetch(`${import.meta.env.VITE_API_URL}/media/${selectedIndex}/watched`, { method: 'PATCH' })
     .then(res => res.json())
     .then(watchedItem => (
       // update only the matching row, keeping all other rows unchanged (avoids refetching the whole list)
