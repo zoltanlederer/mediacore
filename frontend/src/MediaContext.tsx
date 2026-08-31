@@ -3,6 +3,7 @@ import type { Media } from './types';
 
 interface MediaContextType {
     data: Media[];
+    loading: boolean;
     page: number;
     // "on..." names signal these are handlers that do real work (e.g. updating the URL),
     // not plain useState setters — see AppContent for the implementations

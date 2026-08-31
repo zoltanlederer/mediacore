@@ -9,6 +9,15 @@ function MediaList() {
 		return null
 	}
 
+	if (context.loading) {
+		return (
+			<div className="loading-message">
+				<div className="spinner"></div>
+				Loading media library... this may take a moment on first load.
+			</div>
+		)
+	}
+
 	return (
 		<div className="media-table-wrapper">
 			<table className="media-table">

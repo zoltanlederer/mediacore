@@ -21,7 +21,12 @@ function MediaDetail () {
     },[index])
 
     if(!item){
-        return <p>Loading...</p>
+        return (
+            <div className="loading-message">
+                <div className="spinner"></div>
+                Loading media library... this may take a moment on first load.
+            </div>
+        )
     }
 
     if(notFound){

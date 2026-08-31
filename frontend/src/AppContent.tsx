@@ -12,6 +12,7 @@ function AppContent() {
   const [data, setData] = useState<Media[]>([])
   const [total, setTotal] = useState(0)
   const [limit, setLimit] = useState(0)
+  const [loading, setLoading] = useState(true)
 
   // filters and page live in the URL (not useState) so they survive a refresh,
   // work with browser back/forward, and can be shared as a link
@@ -22,6 +23,7 @@ function AppContent() {
   const page = Number(searchParams.get('page')) || 1
 
   useEffect(() => {
+    setLoading(true)
     const baseUrl = `${import.meta.env.VITE_API_URL}/media`
     // this is a SEPARATE params object for the backend fetch request —
     // not the same as the frontend's own URL params above, even though
@@ -43,6 +45,7 @@ function AppContent() {
     fetch(url)
     .then(res => res.json())
     .then(fetchedData => {
+      setLoading(false)  
       setData(fetchedData.data)
       setTotal(fetchedData.total)
       setLimit(fetchedData.limit)
@@ -102,6 +105,7 @@ function AppContent() {
     <>
     <MediaContext.Provider value={{
       data,
+      loading,
       page,
       onPageChange: updatePageParam,
       total,
