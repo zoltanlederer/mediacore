@@ -90,7 +90,7 @@ app.get('/media', (req: Request, res: Response) => {
     }
 
     if (condition.length === 0){
-        const allMedia = db.prepare<[number, number], Media>('SELECT * FROM media LIMIT ? OFFSET ?').all(limit, offset);
+        const allMedia = db.prepare<[number, number], Media>('SELECT * FROM media ORDER BY title COLLATE NOCASE LIMIT ? OFFSET ?').all(limit, offset);
         const formattedMedia = allMedia.map(item => ({ ...item, watched: item.watched === 1 }))
         const getTotal = db.prepare<[], {total: number}>('SELECT COUNT(*) as total FROM media').get();
         
@@ -110,7 +110,7 @@ app.get('/media', (req: Request, res: Response) => {
     } else {
         // safe to join with AND even if only one condition exists — join() on a single-item array just returns that item
         const conditionInString = condition.join(' AND ')
-        const getMedia = db.prepare<any[], Media>(`${baseQuery} WHERE ${conditionInString} LIMIT ? OFFSET ?`).all(...params, limit, offset);
+        const getMedia = db.prepare<any[], Media>(`${baseQuery} WHERE ${conditionInString} ORDER BY title COLLATE NOCASE LIMIT ? OFFSET ?`).all(...params, limit, offset);
         const formattedMedia = getMedia.map(item => ({ ...item, watched: item.watched === 1 }))
         const getTotal = db.prepare<any[], {total: number}>(`SELECT COUNT(*) as total FROM media WHERE ${conditionInString}`).get(...params);
         
