@@ -18,6 +18,7 @@ function AppContent() {
   // work with browser back/forward, and can be shared as a link
   const [searchParams, setSearchParams] = useSearchParams()
 
+  const selectedSearch = searchParams.get('search') ?? ''
   const selectedGenre = searchParams.get('genre') ?? 'All'
   const selectedType = searchParams.get('type') ?? 'all'
   const page = Number(searchParams.get('page')) || 1
@@ -30,10 +31,13 @@ function AppContent() {
     // it's built from the same three values
     const params = new URLSearchParams()
 
-    if (selectedGenre.toLocaleLowerCase() != 'all') {
+    if (selectedSearch.length > 2) {
+        params.append('search', selectedSearch)
+    }
+    if (selectedGenre.toLowerCase() != 'all') {
       params.append('genre', selectedGenre)
     }
-    if (selectedType.toLocaleLowerCase() != 'all') {
+    if (selectedType.toLowerCase() != 'all') {
       params.append('type', selectedType)
     }
     if (page > 1) {
@@ -50,7 +54,7 @@ function AppContent() {
       setTotal(fetchedData.total)
       setLimit(fetchedData.limit)
     })
-  }, [selectedGenre, selectedType, page])
+  }, [selectedSearch, selectedGenre, selectedType, page])
 
   const handleWatchedToggle = (selectedIndex: number) => {
     fetch(`${import.meta.env.VITE_API_URL}/media/${selectedIndex}/watched`, { method: 'PATCH' })
@@ -63,6 +67,17 @@ function AppContent() {
         )
       )
     ))
+  }
+
+  const updateSearchParam = (value: string) => {
+    const newParams = new URLSearchParams(searchParams)
+    if (value.length < 2) {
+        newParams.delete('search')
+    } else {
+        newParams.set('search', value)
+    }
+    newParams.delete('page')
+    setSearchParams(newParams)
   }
 
   // resets page whenever genre changes, combined into the same params update
@@ -115,6 +130,8 @@ function AppContent() {
       onGenreChange: updateGenreParam,
       selectedType,
       onSelectedTypeChange: updateTypeParam,
+      selectedSearch,
+      onSearchChange: updateSearchParam,
     }}>
       <div className="app-container">
         <Routes>        

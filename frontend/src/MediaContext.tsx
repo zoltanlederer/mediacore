@@ -15,6 +15,8 @@ interface MediaContextType {
     onGenreChange: (value: string) => void;
     selectedType: string;
     onSelectedTypeChange: (value: string) => void;
+    selectedSearch: string;
+    onSearchChange: (value: string) => void;
 }
 
 const MediaContext = createContext<MediaContextType | undefined>(undefined);

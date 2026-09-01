@@ -5,6 +5,9 @@ import MediaContext from './MediaContext'
 function FilterForm () {
     const context = useContext(MediaContext)
     const [genres, setGenres] = useState<string[]>([])
+    // local state lets the input feel responsive on every keystroke;
+    // the actual search (context.onSearchChange) only fires after the debounce below
+    const [searchInput, setSearchInput] = useState(context?.selectedSearch ?? '')
 
     useEffect(() => {
         fetch(`${import.meta.env.VITE_API_URL}/genres`)
@@ -12,10 +15,26 @@ function FilterForm () {
         .then((res: string[]) => setGenres(res))
     }, [])
 
+    // debounce: wait 400ms after the user stops typing before triggering a real search,
+    // avoiding a fetch on every single keystroke. Each keystroke cancels the previous
+    // timer via the cleanup function, so only the last pause actually fires.
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            context?.onSearchChange(searchInput)
+        }, 400)
+        return () => clearTimeout(timer)
+    }, [searchInput])
+
+    // keeps searchInput in sync when selectedSearch changes from elsewhere
+    // (e.g. clicking the logo resets the URL, but wouldn't otherwise clear this local state
+    useEffect(() => {
+        setSearchInput(context?.selectedSearch ?? '')
+    }, [context?.selectedSearch])
+
     if(!context) {
         return null
     }
-
+    
     // page reset happens inside onGenreChange/onSelectedTypeChange themselves,
     // not here — combining updates avoids a stale-state race with setSearchParams
     const handleGenre = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -30,6 +49,10 @@ function FilterForm () {
         <div className="app-header">
             <Link to="/" className="logo-link">MediaCore</Link>
             <div className="filters">
+                <div className="filter-group">
+                    <label htmlFor="search-input">Search</label>
+                    <input id='search-input' type='text' placeholder='Search titles...' value={searchInput} onChange={(e) => setSearchInput(e.target.value)} />
+                </div>
                 <div className="filter-group">
                     <label htmlFor="genre-select">Genre</label>
                     <select id="genre-select" value={context.selectedGenre} onChange={handleGenre}>

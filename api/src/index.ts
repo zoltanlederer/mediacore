@@ -89,6 +89,11 @@ app.get('/media', (req: Request, res: Response) => {
         params.push(req.query.type)
     }
 
+    if (req.query.search) {
+        condition.push('title LIKE ?')
+        params.push(`%${req.query.search}%`)
+    }
+
     if (condition.length === 0){
         const allMedia = db.prepare<[number, number], Media>('SELECT * FROM media ORDER BY title COLLATE NOCASE LIMIT ? OFFSET ?').all(limit, offset);
         const formattedMedia = allMedia.map(item => ({ ...item, watched: item.watched === 1 }))

@@ -60,6 +60,20 @@ body {
   letter-spacing: 0.03em;
 }
 
+.filters input {
+  height: 34px;
+  border-radius: 6px;
+  border: 1px solid #263449;
+  background: #182338;
+  color: #F1F5F9;
+  font-size: 13px;
+  padding: 0 10px;
+}
+
+.filters input::placeholder {
+  color: #7C8CA8;
+}
+
 .media-table {
   width: 100%;
   border-collapse: collapse;
@@ -265,11 +279,13 @@ body {
   }
 
   .filters {
+    flex-direction: column;
     width: 100%;
   }
 
-  .filters select {
-    flex: 1;
+  .filters select,
+  .filters input {
+    width: 100%;
   }
 
   .media-table-wrapper {
