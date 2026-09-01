@@ -20,7 +20,9 @@ function FilterForm () {
     // timer via the cleanup function, so only the last pause actually fires.
     useEffect(() => {
         const timer = setTimeout(() => {
-            context?.onSearchChange(searchInput)
+            if (searchInput !== context?.selectedSearch){
+                context?.onSearchChange(searchInput)
+            }
         }, 400)
         return () => clearTimeout(timer)
     }, [searchInput])
